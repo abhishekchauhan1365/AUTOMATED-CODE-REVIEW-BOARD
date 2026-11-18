@@ -284,7 +284,7 @@ export function NewReviewPage() {
                 rows={15}
                 spellCheck={false}
                 placeholder="Paste unified git diff (diff --git a/... b/...) here..."
-                className="w-full rounded-md bg-[#080A0F] border border-surface-700 p-3 font-mono text-xs text-slate-200 leading-relaxed focus:outline-none focus:border-blue-500"
+                className="w-full rounded-md bg-surface-850 border border-surface-700 p-3 font-mono text-xs text-slate-100 leading-relaxed focus:outline-none focus:border-blue-500"
               />
             </div>
           ) : (

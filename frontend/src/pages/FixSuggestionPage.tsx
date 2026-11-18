@@ -165,41 +165,41 @@ export function FixSuggestionPage() {
 
           {/* Original vs Suggested Replacement */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="rounded-lg bg-surface-900 border border-surface-700 overflow-hidden">
-              <div className="px-3 py-2 border-b border-surface-700 text-xs font-mono text-red-300 bg-red-500/5">
+            <div className="rounded-lg bg-surface-900 border border-surface-700 overflow-hidden shadow-sm">
+              <div className="px-3 py-2 border-b border-surface-700 text-xs font-mono text-red-700 bg-red-50">
                 Original Code ({patch.file_path}:{patch.line_start})
               </div>
-              <pre className="p-3 font-mono text-xs text-slate-200 bg-[#080A0F] overflow-x-auto">
+              <pre className="p-3 font-mono text-xs text-slate-200 bg-surface-850 overflow-x-auto">
                 {patch.original_code}
               </pre>
             </div>
-            <div className="rounded-lg bg-surface-900 border border-surface-700 overflow-hidden">
-              <div className="px-3 py-2 border-b border-surface-700 text-xs font-mono text-emerald-300 bg-emerald-500/5">
+            <div className="rounded-lg bg-surface-900 border border-surface-700 overflow-hidden shadow-sm">
+              <div className="px-3 py-2 border-b border-surface-700 text-xs font-mono text-emerald-700 bg-emerald-50">
                 Proposed Replacement
               </div>
-              <pre className="p-3 font-mono text-xs text-slate-200 bg-[#080A0F] overflow-x-auto">
+              <pre className="p-3 font-mono text-xs text-slate-200 bg-surface-850 overflow-x-auto">
                 {patch.suggested_replacement}
               </pre>
             </div>
           </div>
 
           {/* Unified Diff Preview */}
-          <div className="rounded-lg bg-surface-900 border border-surface-700 overflow-hidden">
-            <div className="px-4 py-2.5 border-b border-surface-700 text-xs font-semibold text-slate-200">
+          <div className="rounded-lg bg-surface-900 border border-surface-700 overflow-hidden shadow-sm">
+            <div className="px-4 py-2.5 border-b border-surface-700 text-xs font-semibold text-slate-100">
               Unified Diff Preview
             </div>
-            <div className="p-3 bg-[#080A0F] font-mono text-xs overflow-x-auto space-y-0.5">
+            <div className="p-3 bg-surface-850 font-mono text-xs overflow-x-auto space-y-0.5">
               {patch.proposed_patch.split("\n").map((line, i) => {
                 let cls = "text-slate-300";
                 if (line.startsWith("+") && !line.startsWith("+++")) {
-                  cls = "bg-emerald-500/10 text-emerald-300";
+                  cls = "bg-emerald-100/80 text-emerald-800 font-semibold";
                 } else if (line.startsWith("-") && !line.startsWith("---")) {
-                  cls = "bg-red-500/10 text-red-300";
+                  cls = "bg-red-100/80 text-red-800 font-semibold";
                 } else if (line.startsWith("@@")) {
-                  cls = "text-blue-400";
+                  cls = "text-blue-700 bg-blue-50/60 font-semibold";
                 }
                 return (
-                  <div key={i} className={`px-2 py-0.5 whitespace-pre ${cls}`}>
+                  <div key={i} className={`px-2 py-0.5 whitespace-pre rounded-sm ${cls}`}>
                     {line || " "}
                   </div>
                 );
@@ -208,9 +208,9 @@ export function FixSuggestionPage() {
           </div>
 
           {/* Explicit Safety Approval Gate */}
-          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 flex flex-wrap items-center justify-between gap-4">
+          <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 flex flex-wrap items-center justify-between gap-4">
             <div className="space-y-1 max-w-2xl">
-              <div className="text-xs font-semibold text-amber-300 uppercase tracking-wide">
+              <div className="text-xs font-semibold text-amber-800 uppercase tracking-wide">
                 Human-in-the-Loop Safety Gate
               </div>
               <p className="text-xs text-slate-300">{patch.safety_note}</p>

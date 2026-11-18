@@ -302,13 +302,13 @@ export function ReviewResultsPage() {
                 </div>
 
                 {finding.evidence && (
-                  <pre className="rounded bg-[#080A0F] border border-surface-700 p-2.5 font-mono text-xs text-slate-200 overflow-x-auto">
+                  <pre className="rounded bg-surface-850 border border-surface-700 p-2.5 font-mono text-xs text-slate-100 overflow-x-auto">
                     {finding.evidence}
                   </pre>
                 )}
 
                 {finding.recommended_action && (
-                  <div className="text-xs text-emerald-300/90 bg-emerald-500/5 border border-emerald-500/20 rounded px-3 py-2">
+                  <div className="text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 rounded px-3 py-2">
                     <strong className="font-medium">Recommended Action: </strong>
                     {finding.recommended_action}
                   </div>

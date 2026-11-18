@@ -1,11 +1,11 @@
 import type { MergeDecision, Severity } from "../types/review";
 
 const SEVERITY_STYLES: Record<Severity, string> = {
-  CRITICAL: "bg-red-500/15 text-red-400 border-red-500/30",
-  HIGH: "bg-orange-500/15 text-orange-400 border-orange-500/30",
-  MEDIUM: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-  LOW: "bg-sky-500/15 text-sky-400 border-sky-500/30",
-  INFO: "bg-slate-500/15 text-slate-300 border-slate-500/30",
+  CRITICAL: "bg-red-50 text-red-700 border-red-200",
+  HIGH: "bg-orange-50 text-orange-700 border-orange-200",
+  MEDIUM: "bg-amber-50 text-amber-800 border-amber-200",
+  LOW: "bg-sky-50 text-sky-700 border-sky-200",
+  INFO: "bg-slate-100 text-slate-700 border-slate-200",
 };
 
 export function SeverityBadge({ severity }: { severity: Severity }) {
@@ -21,7 +21,7 @@ export function SeverityBadge({ severity }: { severity: Severity }) {
 export function MergeBadge({ decision }: { decision: MergeDecision | null | undefined }) {
   if (!decision) {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-mono border bg-slate-800/70 text-slate-400 border-slate-700">
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-mono border bg-slate-100 text-slate-600 border-slate-200">
         PENDING
       </span>
     );
@@ -31,13 +31,12 @@ export function MergeBadge({ decision }: { decision: MergeDecision | null | unde
     <span
       className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono font-semibold border ${
         approved
-          ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
-          : "bg-red-500/15 text-red-400 border-red-500/30"
+          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+          : "bg-red-50 text-red-700 border-red-200"
       }`}
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${approved ? "bg-emerald-400" : "bg-red-400"}`} />
+      <span className={`w-1.5 h-1.5 rounded-full ${approved ? "bg-emerald-600" : "bg-red-600"}`} />
       {decision}
     </span>
   );
 }
-

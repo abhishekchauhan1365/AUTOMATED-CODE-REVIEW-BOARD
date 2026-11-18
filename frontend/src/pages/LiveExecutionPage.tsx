@@ -114,7 +114,7 @@ export function LiveExecutionPage() {
         <div className="px-4 py-2.5 border-b border-surface-700 text-xs font-semibold text-slate-200">
           Real-Time Execution Trace
         </div>
-        <div className="p-3 max-h-60 overflow-y-auto font-mono text-xs space-y-1.5 bg-[#080A0F]">
+        <div className="p-3 max-h-60 overflow-y-auto font-mono text-xs space-y-1.5 bg-surface-850">
           {events.length === 0 ? (
             <div className="text-slate-500">Waiting for SSE events from backend...</div>
           ) : (
