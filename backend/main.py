@@ -116,16 +116,60 @@ PRECONFIGURED_USERS = {
 }
 
 
-@app.post("/api/auth/login", response_model=AuthResponse)
-def login(payload: LoginRequest) -> AuthResponse:
-    """Simple developer authentication endpoint supporting demo and custom accounts."""
-    u_lower = payload.username.strip().lower()
-    if not payload.username.strip() or not payload.password.strip():
-        raise HTTPException(status_code=400, detail="Username and password are required.")
+_FAILED_LOGIN_ATTEMPTS: dict[str, list[float]] = {}
+MAX_LOGIN_ATTEMPTS = 5
+LOCKOUT_SECONDS = 30
 
+
+def check_rate_limit(key: str) -> None:
+    """Safety net: enforce temporary account lockout after multiple consecutive failed attempts."""
+    import time
+    now = time.time()
+    attempts = _FAILED_LOGIN_ATTEMPTS.get(key, [])
+    valid = [t for t in attempts if now - t < 60]
+    _FAILED_LOGIN_ATTEMPTS[key] = valid
+    if len(valid) >= MAX_LOGIN_ATTEMPTS:
+        elapsed = now - valid[-MAX_LOGIN_ATTEMPTS]
+        remaining = int(LOCKOUT_SECONDS - elapsed)
+        if remaining > 0:
+            raise HTTPException(
+                status_code=429,
+                detail=f"Safety Lockout: Too many failed login attempts. Please wait {remaining} seconds.",
+            )
+
+
+def record_failed_attempt(key: str) -> None:
+    import time
+    _FAILED_LOGIN_ATTEMPTS.setdefault(key, []).append(time.time())
+
+
+def clear_failed_attempts(key: str) -> None:
+    _FAILED_LOGIN_ATTEMPTS.pop(key, None)
+
+
+@app.post("/api/auth/login", response_model=AuthResponse)
+def login(payload: LoginRequest, request: Request) -> AuthResponse:
+    """Simple developer authentication endpoint supporting demo and custom accounts with safety rate-limiting."""
+    u_raw = payload.username.strip()
+    p_raw = payload.password.strip()
+
+    # Safety Net 1: Length and control character sanitization
+    if not u_raw or not p_raw:
+        raise HTTPException(status_code=400, detail="Username and password are required.")
+    if len(u_raw) > 128 or len(p_raw) > 128:
+        raise HTTPException(status_code=400, detail="Input exceeded maximum character limit (128).")
+    if any(ord(c) < 32 for c in u_raw + p_raw):
+        raise HTTPException(status_code=400, detail="Invalid control characters detected in credentials.")
+
+    client_ip = request.client.host if request.client else "local"
+    rate_key = f"{client_ip}:{u_raw.lower()}"
+    check_rate_limit(rate_key)
+
+    u_lower = u_raw.lower()
     if u_lower in PRECONFIGURED_USERS:
         conf = PRECONFIGURED_USERS[u_lower]
         if payload.password != conf["password"]:
+            record_failed_attempt(rate_key)
             raise HTTPException(status_code=401, detail="Invalid credentials for demo account.")
         user = UserProfile(
             id=f"user_{u_lower.split('@')[0]}",
@@ -136,7 +180,7 @@ def login(payload: LoginRequest) -> AuthResponse:
         )
     else:
         # Flexible login for any student or reviewer
-        clean_user = payload.username.strip()
+        clean_user = u_raw
         user = UserProfile(
             id=f"user_{clean_user.replace('@', '_').replace('.', '_')[:16]}",
             username=clean_user,
@@ -145,6 +189,7 @@ def login(payload: LoginRequest) -> AuthResponse:
             role="Code Reviewer",
         )
 
+    clear_failed_attempts(rate_key)
     import uuid
     token = f"crb_tok_{uuid.uuid4().hex}"
     _ACTIVE_SESSIONS[token] = user
