@@ -35,16 +35,31 @@ const SLIDES = [
     title: "Autonomous Multi-Agent Review",
     subtitle: "Diff, Style, Security & Test-Coverage agents coordinate concurrently via Microsoft Semantic Kernel.",
     tag: "Fan-Out / Fan-In",
+    preview: [
+      { agent: "Diff Agent", status: "Analyzed 2 AST functions", color: "text-blue-300" },
+      { agent: "Security Agent", status: "Flagged SQLi & redacted secret", color: "text-amber-300" },
+      { agent: "Reviewer Manager", status: "Verdict: REQUEST_CHANGES", color: "text-red-300" },
+    ],
   },
   {
     title: "Zero-Leak Secret Redaction",
     subtitle: "High-entropy API keys and passwords are masked automatically before reaching logs or shared state.",
     tag: "Enterprise Safety",
+    preview: [
+      { agent: "Entropy Scanner", status: "Shannon score: 4.89 (High)", color: "text-amber-300" },
+      { agent: "Redaction Mask", status: "sk-************890", color: "text-emerald-300" },
+      { agent: "Audit Logger", status: "Masked entry persisted to SQLite", color: "text-blue-300" },
+    ],
   },
   {
     title: "Automated Fix Suggestions",
     subtitle: "Isolates top findings, extracts AST context, and generates syntactically validated unified diff patches.",
     tag: "Human-in-the-Loop",
+    preview: [
+      { agent: "AST Extractor", status: "Target: api/auth_handler.py:4", color: "text-blue-300" },
+      { agent: "Patch Validator", status: "Syntax verified via ast.parse", color: "text-emerald-300" },
+      { agent: "Safety Gate", status: "Locked until reviewer approves", color: "text-purple-300" },
+    ],
   },
 ];
 
@@ -177,67 +192,84 @@ export function LoginPage() {
     executeLogin(username, password);
   };
 
+  const currentSlide = SLIDES[activeSlide];
+
   return (
     <div className="min-h-screen bg-surface-950 text-slate-100 flex items-center justify-center p-4 sm:p-6 lg:p-10 selection:bg-blue-100 selection:text-blue-900">
       {/* Outer Split Card Container */}
       <div className="w-full max-w-5xl rounded-3xl bg-surface-900 border border-surface-700 shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
-        {/* LEFT COLUMN: Modern Visual Showcase Card (Inspired by reference layout) */}
+        {/* LEFT COLUMN: Modern Visual Showcase Card (100% Pure White & Crystal-Clear High-Contrast Text) */}
         <div className="lg:col-span-5 p-3 sm:p-4 flex flex-col">
           <div className="w-full h-full rounded-2xl relative overflow-hidden bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#020617] text-white p-7 sm:p-8 flex flex-col justify-between shadow-inner">
-            {/* Ambient decorative glowing orb */}
-            <div className="absolute top-1/4 right-0 w-72 h-72 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
-            <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-[70px] pointer-events-none" />
+            {/* Ambient glowing orbs */}
+            <div className="absolute top-1/4 right-0 w-72 h-72 bg-blue-500/25 rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-indigo-500/25 rounded-full blur-[70px] pointer-events-none" />
 
             {/* Top row: Brand & "Back to website" pill button */}
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
-                  <ShieldCheck className="w-5 h-5 text-blue-400" />
+                <div className="w-8 h-8 rounded-lg bg-white/15 backdrop-blur-md border border-white/25 flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5 text-blue-300" />
                 </div>
-                <span className="font-semibold text-sm tracking-tight text-white font-mono">
+                <span className="font-bold text-sm tracking-tight text-white font-mono">
                   ReviewBoard
                 </span>
               </div>
 
               <Link
                 to="/"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/15 text-xs text-white/90 transition-all font-mono"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-xs text-white transition-all font-mono font-medium shadow-xs"
               >
-                Back to website <ArrowRight className="w-3 h-3" />
+                Back to website <ArrowRight className="w-3 h-3 text-white" />
               </Link>
             </div>
 
-            {/* Middle Graphic: Live Multi-Agent Fan-Out Visual */}
-            <div className="relative z-10 my-8 py-4 space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-[11px] font-mono text-blue-300">
-                <Sparkles className="w-3 h-3 text-blue-400" />
-                <span>{SLIDES[activeSlide].tag}</span>
+            {/* Middle Graphic: High-Contrast Dynamic Slide Showcase */}
+            <div className="relative z-10 my-6 py-2 space-y-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/30 border border-blue-400/40 text-xs font-mono text-blue-200 font-semibold shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-blue-300" />
+                <span>{currentSlide.tag}</span>
               </div>
 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeSlide}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-2"
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-2.5"
                 >
-                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-snug">
-                    {SLIDES[activeSlide].title}
+                  <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                    {currentSlide.title}
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm">
-                    {SLIDES[activeSlide].subtitle}
+                  {/* High-Contrast Pristine White Subtitle */}
+                  <p className="text-sm font-normal text-white/95 leading-relaxed max-w-sm">
+                    {currentSlide.subtitle}
                   </p>
                 </motion.div>
               </AnimatePresence>
+
+              {/* Dynamic Live Multi-Agent Mini Preview Box */}
+              <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 space-y-2 font-mono text-[11px] shadow-sm">
+                <div className="text-white/60 uppercase tracking-wider text-[10px] pb-1 border-b border-white/10 flex items-center justify-between">
+                  <span>Live Agent Pipeline</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+                {currentSlide.preview.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between gap-2">
+                    <span className="text-white/80 font-medium">{item.agent}:</span>
+                    <span className={`${item.color} font-semibold truncate`}>{item.status}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Bottom Row: Tagline & Carousel Indicator Bars */}
-            <div className="relative z-10 pt-4 border-t border-white/10 space-y-3">
-              <div className="text-xs text-slate-400 font-mono flex items-center justify-between">
-                <span>CSE476 · Group 14</span>
-                <span className="text-emerald-400 font-semibold">Semantic Kernel Live</span>
+            <div className="relative z-10 pt-4 border-t border-white/15 space-y-3">
+              <div className="text-xs text-white/80 font-mono flex items-center justify-between">
+                <span className="font-medium">CSE476 · Group 14</span>
+                <span className="text-emerald-300 font-bold">Semantic Kernel Live</span>
               </div>
 
               {/* Interactive Carousel Indicator Bars */}
@@ -248,7 +280,7 @@ export function LoginPage() {
                     type="button"
                     onClick={() => setActiveSlide(idx)}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                      activeSlide === idx ? "w-8 bg-blue-400" : "w-2 bg-white/30 hover:bg-white/50"
+                      activeSlide === idx ? "w-8 bg-blue-300 shadow-xs" : "w-2.5 bg-white/40 hover:bg-white/70"
                     }`}
                     title={`Slide ${idx + 1}`}
                   />
@@ -420,7 +452,7 @@ export function LoginPage() {
             <div className="flex-grow border-t border-surface-700" />
           </div>
 
-          {/* One-Click Demo Role Cards (Inspired by the Google / Apple social login buttons in the reference layout) */}
+          {/* One-Click Demo Role Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {DEMO_ACCOUNTS.map((acc) => {
               const isActive = username === acc.username;
