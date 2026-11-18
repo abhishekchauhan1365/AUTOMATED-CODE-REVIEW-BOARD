@@ -9,6 +9,7 @@ import {
   FileCode2,
   PlusCircle,
   ShieldAlert,
+  Wrench,
   XCircle,
 } from "lucide-react";
 import { MergeBadge } from "../components/SeverityBadge";
@@ -37,24 +38,28 @@ export function DashboardPage() {
       value: stats?.total_reviews ?? 0,
       icon: FileCode2,
       accent: "text-blue-400",
+      subtitle: "Recorded in SQLite",
     },
     {
-      label: "Approved Reviews",
+      label: "Merge Approved",
       value: stats?.approved_reviews ?? 0,
       icon: CheckCircle2,
       accent: "text-emerald-400",
+      subtitle: "Clean pull requests",
     },
     {
-      label: "Changes Requested",
-      value: stats?.changes_requested ?? 0,
-      icon: XCircle,
-      accent: "text-amber-400",
+      label: "Patches Approved",
+      value: stats?.patches_approved ?? 0,
+      icon: Wrench,
+      accent: "text-purple-400",
+      subtitle: "Remediated by user",
     },
     {
-      label: "Critical Issues Detected",
+      label: "Open Critical Issues",
       value: stats?.critical_issues_detected ?? 0,
       icon: ShieldAlert,
       accent: "text-red-400",
+      subtitle: stats?.patches_approved ? `(${stats.patches_approved} remediated)` : "Unresolved findings",
     },
   ];
 
@@ -103,6 +108,11 @@ export function DashboardPage() {
               <div className="mt-2 text-2xl font-semibold font-mono text-slate-100">
                 {loading ? "—" : item.value}
               </div>
+              {item.subtitle && (
+                <div className="mt-1 text-[11px] font-mono text-slate-400">
+                  {item.subtitle}
+                </div>
+              )}
             </motion.div>
           );
         })}
@@ -157,10 +167,16 @@ export function DashboardPage() {
                       {new Date(rev.created_at).toLocaleString()}
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 shrink-0">
+                  <div className="flex items-center gap-2.5 shrink-0 flex-wrap justify-end">
+                    {rev.patch_approved && (
+                      <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" />
+                        PATCH APPROVED
+                      </span>
+                    )}
                     {rev.critical_count > 0 && (
                       <span className="text-xs font-mono text-red-400">
-                        {rev.critical_count} CRIT
+                        {rev.patch_approved ? `${Math.max(0, rev.critical_count - 1)} CRIT` : `${rev.critical_count} CRIT`}
                       </span>
                     )}
                     <MergeBadge decision={rev.merge_recommendation} />

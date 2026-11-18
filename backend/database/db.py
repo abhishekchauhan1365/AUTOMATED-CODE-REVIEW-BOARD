@@ -121,6 +121,7 @@ def list_reviews(db_session: Optional[Session] = None) -> list[ReviewSummaryItem
                     low_count=r.low_count,
                     info_count=r.info_count,
                     total_findings=r.total_findings,
+                    patch_approved=bool(r.patch_approved),
                     created_at=r.created_at,
                     completed_at=r.completed_at,
                     duration_ms=r.duration_ms,
@@ -192,7 +193,9 @@ def get_dashboard_stats(db_session: Optional[Session] = None) -> dict[str, Any]:
         total_reviews = len(rows)
         approved_reviews = sum(1 for r in rows if r.merge_recommendation == MergeDecision.APPROVE.value)
         changes_requested = sum(1 for r in rows if r.merge_recommendation == MergeDecision.REQUEST_CHANGES.value)
+        patches_approved = sum(1 for r in rows if r.patch_approved)
         critical_detected = sum(r.critical_count for r in rows)
+        open_critical = max(0, critical_detected - patches_approved)
 
         agent_agg: dict[str, dict[str, Any]] = {}
         for r in rows:
@@ -242,7 +245,9 @@ def get_dashboard_stats(db_session: Optional[Session] = None) -> dict[str, Any]:
             "total_reviews": total_reviews,
             "approved_reviews": approved_reviews,
             "changes_requested": changes_requested,
-            "critical_issues_detected": critical_detected,
+            "critical_issues_detected": open_critical,
+            "total_critical_detected": critical_detected,
+            "patches_approved": patches_approved,
             "agent_stats": agent_stats,
         }
     finally:

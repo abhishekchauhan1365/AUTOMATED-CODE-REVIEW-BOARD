@@ -151,7 +151,14 @@ export function ReviewHistoryPage() {
                       {rev.submission_type}
                     </td>
                     <td className="py-3 px-3">
-                      <MergeBadge decision={rev.merge_recommendation} />
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <MergeBadge decision={rev.merge_recommendation} />
+                        {rev.patch_approved && (
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400">
+                            PATCH APPROVED
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-3 font-mono text-slate-300">
                       {rev.total_findings}

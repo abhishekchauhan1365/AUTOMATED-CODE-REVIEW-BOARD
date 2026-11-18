@@ -122,6 +122,7 @@ export interface ReviewSummaryItem {
   low_count: number;
   info_count: number;
   total_findings: number;
+  patch_approved?: boolean;
   created_at: string;
   completed_at: string | null;
   duration_ms: number | null;
@@ -149,6 +150,8 @@ export interface DashboardStats {
   approved_reviews: number;
   changes_requested: number;
   critical_issues_detected: number;
+  total_critical_detected?: number;
+  patches_approved?: number;
   agent_stats: Array<{
     agent_name: string;
     display_name: string;

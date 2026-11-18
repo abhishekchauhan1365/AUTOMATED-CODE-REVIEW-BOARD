@@ -12,3 +12,4 @@ export function ProtectedRoute() {
 
   return <Outlet />;
 }
+

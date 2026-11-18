@@ -202,6 +202,7 @@ class ReviewSummaryItem(BaseModel):
     low_count: int = 0
     info_count: int = 0
     total_findings: int = 0
+    patch_approved: bool = False
     created_at: str
     completed_at: Optional[str] = None
     duration_ms: Optional[int] = None
