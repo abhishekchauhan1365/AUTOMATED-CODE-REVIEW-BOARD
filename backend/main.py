@@ -89,6 +89,18 @@ class AuthResponse(BaseModel):
 _ACTIVE_SESSIONS: dict[str, UserProfile] = {}
 
 PRECONFIGURED_USERS = {
+    "demo": {
+        "password": "demo123",
+        "name": "Demo Reviewer",
+        "role": "Review Engineer",
+        "email": "demo@cse476.edu",
+    },
+    "admin": {
+        "password": "admin",
+        "name": "Review Board Admin",
+        "role": "Lead Architect",
+        "email": "admin@cse476.edu",
+    },
     "reviewer@cse476.edu": {
         "password": "review123",
         "name": "Dr. Sarah Chen",

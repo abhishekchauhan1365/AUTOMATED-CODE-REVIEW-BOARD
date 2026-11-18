@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { DashboardPage } from "./pages/DashboardPage";
 import { FixSuggestionPage } from "./pages/FixSuggestionPage";
@@ -17,15 +18,17 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Dashboard Workspace */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/app" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/new" element={<NewReviewPage />} />
-          <Route path="/history" element={<ReviewHistoryPage />} />
-          <Route path="/reviews/:reviewId/live" element={<LiveExecutionPage />} />
-          <Route path="/reviews/:reviewId" element={<ReviewResultsPage />} />
-          <Route path="/reviews/:reviewId/patch" element={<FixSuggestionPage />} />
+        {/* Protected Dashboard Workspace - Authentication Required */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/app" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/new" element={<NewReviewPage />} />
+            <Route path="/history" element={<ReviewHistoryPage />} />
+            <Route path="/reviews/:reviewId/live" element={<LiveExecutionPage />} />
+            <Route path="/reviews/:reviewId" element={<ReviewResultsPage />} />
+            <Route path="/reviews/:reviewId/patch" element={<FixSuggestionPage />} />
+          </Route>
         </Route>
 
         {/* Fallback */}
